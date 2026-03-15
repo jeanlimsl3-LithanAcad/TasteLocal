@@ -15,6 +15,7 @@ if os.environ.get('WEBSITE_HOSTNAME'):
     # Azure Cloud Settings
     DEBUG = False
     ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME')]
+    
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -22,9 +23,11 @@ if os.environ.get('WEBSITE_HOSTNAME'):
             'USER': os.environ.get('DB_USER'),
             'PASSWORD': os.environ.get('DB_PASSWORD'),
             'HOST': os.environ.get('DB_HOST'),
-            'PORT': '3306',
+            'PORT': '27821',
         }
     }
+    
+    
 else:
     # Local Development Settings
     DEBUG = True
@@ -39,7 +42,8 @@ else:
             'PORT': '3306',
         }
     }
-
+    
+    
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -97,6 +101,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+
+# --- GLOBAL STATIC SETTINGS ---
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
 LOGIN_URL = '/login/'
