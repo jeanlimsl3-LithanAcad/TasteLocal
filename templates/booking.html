@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="fw-bold mb-4 text-center">Book Your Food Experience</h2>
+
+                    <div class="mb-4">
+                        <h5>Traditional Italian Cooking</h5>
+                        <p class="mb-1"><strong>Hosted by:</strong> Bella Cucina Studio</p>
+                        <p class="mb-1"><strong>Location:</strong> Rome</p>
+                        <p class="mb-0"><strong>Price:</strong> $65 per person</p>
+                    </div>
+
+                    <form>
+                        <div class="mb-3">
+                            <label for="booking-date" class="form-label">Select Date</label>
+                            <input type="date" class="form-control" id="booking-date">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="guests" class="form-label">Number of Guests</label>
+                            <input type="number" class="form-control" id="guests" min="1" max="10" value="1">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="requests" class="form-label">Special Requests</label>
+                            <textarea class="form-control" id="requests" rows="3" placeholder="Enter any dietary or accessibility requirements"></textarea>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-orange">Confirm Booking</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- HERO VIDEO SECTION -->
+
+<section class="hero-video">
+
+    <video autoplay muted loop playsinline class="hero-bg">
+        <source src="{% static 'images/food_banner.mp4' %}" type="video/mp4">
+    </video>
+
+    <div class="hero-overlay">
+
+        <div class="container text-center">
+
+            <h1 class="fw-bold mb-3">
+                Discover Authentic Local Food Experiences
+            </h1>
+
+            <p class="mb-5">
+                Explore Singapore's vibrant food culture through unique local dining experiences.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FLOATING SEARCH BAR -->
+
+<div class="search-floating container">
+
+    <div class="search-card shadow-lg">
+
+        <!-- Search Row -->
+
+        <div class="row g-2 align-items-center mb-3">
+
+            <div class="col-md-6">
+                <input type="text"
+                       class="form-control"
+                       placeholder="Search food experiences or vendors">
+            </div>
+
+            <div class="col-md-3">
+                <input type="text"
+                       class="form-control"
+                       placeholder="Location">
+            </div>
+
+            <div class="col-md-3 d-grid">
+                <a href="{% url 'discover' %}" class="btn btn-orange">
+                    Search
+                </a>
+            </div>
+
+        </div>
+
+        <!-- CATEGORY CHIPS -->
+
+        <div class="category-chips text-center">
+
+            <span class="chip">Hawker</span>
+            <span class="chip">Seafood</span>
+            <span class="chip">Desserts</span>
+            <span class="chip">Street Food</span>
+            <span class="chip">Cooking Class</span>
+            <span class="chip">Night Market</span>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- FEATURED FOOD EXPERIENCES -->
+<section class="container py-5">
+
+    <h3 class="text-center fw-bold mb-5">
+        Featured Food Experiences
+    </h3>
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <img src="{% static 'images/peranakan_food.png' %}"
+                     class="card-img-top feature-img">
+                <div class="card-body">
+                    <h6 class="fw-bold">Peranakan Heritage Cuisine</h6>
+                    <p class="text-muted small">
+                        Discover traditional Nyonya dishes and Singapore's Peranakan culinary heritage.
+                    </p>
+                    <a href="{% url 'discover' %}" class="btn btn-sm btn-outline-primary">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <img src="{% static 'images/hawker_centre.jpeg' %}"
+                     class="card-img-top feature-img">
+                <div class="card-body">
+                    <h6 class="fw-bold">Hawker Centre Dining</h6>
+                    <p class="text-muted small">
+                        Experience authentic Singapore street food at famous hawker centres.
+                    </p>
+                    <a href="{% url 'discover' %}" class="btn btn-sm btn-outline-primary">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <img src="{% static 'images/satay_night.jpg' %}"
+                     class="card-img-top feature-img">
+                <div class="card-body">
+                    <h6 class="fw-bold">Night Food Culture</h6>
+                    <p class="text-muted small">
+                        Enjoy Singapore's famous night food markets and satay street dining.
+                    </p>
+                    <a href="{% url 'discover' %}" class="btn btn-sm btn-outline-primary">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <img src="{% static 'images/cooking_class.jpg' %}"
+                     class="card-img-top feature-img">
+                <div class="card-body">
+                    <h6 class="fw-bold">Cooking Workshops</h6>
+                    <p class="text-muted small">
+                        Learn how to cook authentic Singapore dishes with local chefs.
+                    </p>
+                    <a href="{% url 'discover' %}" class="btn btn-sm btn-outline-primary">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- EXPLORE FAMOUS FOOD LOCATIONS -->
+<section class="container py-5">
+
+    <h3 class="text-center fw-bold mb-5">
+        Explore Famous Food Locations
+    </h3>
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <img src="{% static 'images/north_yishun_park.jpg' %}"
+                     class="card-img-top location-img">
+                <div class="card-body">
+                    <h6 class="fw-bold">North Singapore</h6>
+                    <p class="text-muted small">
+                        Explore hidden hawker gems and authentic local favourites in northern Singapore.
+                    </p>
+                    <a href="{% url 'discover' %}" class="btn btn-sm btn-outline-primary">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <img src="{% static 'images/south_chinatown.jpg' %}"
+                     class="card-img-top location-img">
+                <div class="card-body">
+                    <h6 class="fw-bold">South Singapore</h6>
+                    <p class="text-muted small">
+                        Taste classic Singapore dishes at famous hawker centres like Maxwell Food Centre.
+                    </p>
+                    <a href="{% url 'discover' %}" class="btn btn-sm btn-outline-primary">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- East Singapore -->
+<div class="col-md-3">
+    <div class="card shadow-sm h-100">
+
+        <div style="height:180px; overflow:hidden; border-top-left-radius:6px; border-top-right-radius:6px;">
+            <iframe
+                width="100%"
+                height="180"
+                src="https://www.youtube.com/embed/r9RCdSvvocU"
+                title="East Singapore Food Culture"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="card-body">
+            <h6 class="fw-bold">East Singapore</h6>
+            <p class="text-muted small">
+                Explore Peranakan cuisine, Katong Laksa, and vibrant food streets in eastern Singapore.
+            </p>
+
+            <a href="{% url 'discover' %}" class="btn btn-sm btn-outline-primary">
+                Explore
+            </a>
+        </div>
+
+    </div>
+</div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <img src="{% static 'images/west_jurong.jpg' %}"
+                     class="card-img-top location-img">
+                <div class="card-body">
+                    <h6 class="fw-bold">West Singapore</h6>
+                    <p class="text-muted small">
+                        Experience local hawker culture and diverse food options in western Singapore.
+                    </p>
+                    <a href="{% url 'discover' %}" class="btn btn-sm btn-outline-primary">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- HOW IT WORKS -->
+<section class="container py-5">
+
+    <h3 class="text-center fw-bold mb-5">
+        How It Works
+    </h3>
+
+    <div class="row text-center">
+
+        <div class="col-md-4">
+            <div class="how-icon">🔍</div>
+            <p class="mt-3 fw-bold">Step 1</p>
+            <p>Browse local food experiences.</p>
+        </div>
+
+        <div class="col-md-4">
+            <div class="how-icon">📅</div>
+            <p class="mt-3 fw-bold">Step 2</p>
+            <p>Reserve your spot easily.</p>
+        </div>
+
+        <div class="col-md-4">
+            <div class="how-icon">🍽️</div>
+            <p class="mt-3 fw-bold">Step 3</p>
+            <p>Enjoy authentic Singapore flavours.</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CUSTOMER TESTIMONIALS -->
+<section class="container py-5">
+
+    <h3 class="text-center fw-bold mb-5">
+        What Our Customers Say
+    </h3>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="testimonial-card shadow-sm">
+                <p class="text-warning mb-2">★★★★★</p>
+                <p>
+                    "The hawker food tour was amazing! I discovered dishes I would never have found on my own."
+                </p>
+                <hr>
+                <p class="mb-0 fw-bold">Emily Carter</p>
+                <small class="text-muted">Tourist from Australia</small>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="testimonial-card shadow-sm">
+                <p class="text-warning mb-2">★★★★★</p>
+                <p>
+                    "Learning to cook laksa with a local chef was the highlight of my Singapore trip."
+                </p>
+                <hr>
+                <p class="mb-0 fw-bold">Daniel Kim</p>
+                <small class="text-muted">Visitor from South Korea</small>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="testimonial-card shadow-sm">
+                <p class="text-warning mb-2">★★★★☆</p>
+                <p>
+                    "TasteLocal made it easy to discover authentic Singapore food experiences."
+                </p>
+                <hr>
+                <p class="mb-0 fw-bold">Sarah Thompson</p>
+                <small class="text-muted">Traveller from UK</small>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

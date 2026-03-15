@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">My Bookings</h1>
+
+    {% if bookings %}
+        <div class="row g-4">
+            {% for booking in bookings %}
+            <div class="col-md-6">
+                <div class="booking-box h-100">
+                    <h4>{{ booking.experience.title }}</h4>
+                    <p class="mb-2"><strong>Date:</strong> {{ booking.booking_date }}</p>
+                    <p class="mb-2"><strong>Guests:</strong> {{ booking.number_of_guests }}</p>
+                    <p class="mb-2"><strong>Status:</strong> {{ booking.status|title }}</p>
+                    <p class="mb-0"><strong>Location:</strong> {{ booking.experience.location }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No bookings found yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

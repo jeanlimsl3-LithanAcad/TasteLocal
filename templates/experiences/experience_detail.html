@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+
+        <li class="breadcrumb-item">
+            <a href="{% url 'discover' %}">Discover</a>
+        </li>
+
+        <li class="breadcrumb-item active">
+            {{ experience.title }}
+        </li>
+    </ol>
+</nav>
+
+<h1 class="mb-4">{{ experience.title }}</h1>
+
+<div class="row g-4">
+
+    <!-- LEFT COLUMN -->
+    <div class="col-lg-8">
+
+        {% if experience.image %}
+        <img src="{{ experience.image.url }}" class="img-fluid rounded mb-4">
+        {% endif %}
+
+        <h4>Description</h4>
+        <p>{{ experience.description }}</p>
+
+        <p><strong>Location:</strong> {{ experience.location }}</p>
+        <p><strong>Category:</strong> {{ experience.get_category_display }}</p>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+<div class="col-lg-4">
+
+    <div class="booking-box">
+
+        <h3 class="price-text">
+            ${{ experience.price }}
+        </h3>
+
+        <a href="{% url 'create_booking' experience.id %}" 
+           class="btn book-btn btn-lg w-100 mt-3">
+           Book Experience
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

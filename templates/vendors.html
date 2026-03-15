@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="fw-bold text-center mb-4">Our Vendors</h2>
+    <p class="text-center text-muted mb-5">
+        Explore local food hosts and culinary experiences across Singapore.
+    </p>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div style="height:180px; background:#dddddd; display:flex; align-items:center; justify-content:center;">
+                    Vendor Image
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Katong Laksa Heritage Stall</h5>
+                    <p class="card-text">Experience the rich and spicy flavours of Singapore’s famous Katong Laksa.</p>
+                    <p><strong>Location:</strong> Katong, Singapore</p>
+                    <a href="{% url 'vendor' 1 %}" class="btn btn-sm btn-outline-primary">View Vendor</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div style="height:180px; background:#dddddd; display:flex; align-items:center; justify-content:center;">
+                    Vendor Image
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Maxwell Chicken Rice Guide</h5>
+                    <p class="card-text">Discover the heritage and flavours behind Singapore’s national dish.</p>
+                    <p><strong>Location:</strong> Maxwell Food Centre, Singapore</p>
+                    <a href="{% url 'vendor' 2 %}" class="btn btn-sm btn-outline-primary">View Vendor</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div style="height:180px; background:#dddddd; display:flex; align-items:center; justify-content:center;">
+                    Vendor Image
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Lau Pa Sat Satay Street</h5>
+                    <p class="card-text">Enjoy the vibrant atmosphere and grilled satay at Singapore’s iconic food street.</p>
+                    <p><strong>Location:</strong> Raffles Quay, Singapore</p>
+                    <a href="{% url 'vendor' 3 %}" class="btn btn-sm btn-outline-primary">View Vendor</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div style="height:180px; background:#dddddd; display:flex; align-items:center; justify-content:center;">
+                    Vendor Image
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">East Coast Seafood House</h5>
+                    <p class="card-text">Taste Singapore’s iconic chilli crab in a memorable seaside dining experience.</p>
+                    <p><strong>Location:</strong> East Coast, Singapore</p>
+                    <a href="{% url 'vendor' 4 %}" class="btn btn-sm btn-outline-primary">View Vendor</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
