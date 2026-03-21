@@ -58,7 +58,10 @@ INSTALLED_APPS = [
     'bookings',
     'reviews',
     'itineraries',
+    
+    'rest_framework',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

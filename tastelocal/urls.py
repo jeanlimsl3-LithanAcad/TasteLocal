@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
 
+from experiences.views import experience_list_api
 from users.views import (
     home,
     login_view,
@@ -14,7 +15,7 @@ from users.views import (
     booking,
     vendor_dashboard,
     map_view,
-    itinerary,
+    api_demo,
 )
 
 urlpatterns = [
@@ -31,10 +32,14 @@ urlpatterns = [
     path('booking/', booking, name='booking'),
     path('vendor-dashboard/', vendor_dashboard, name='vendor_dashboard'),
     path('map/', map_view, name='map'),
-    path('itinerary/', itinerary, name='itinerary'),
 
+    path('api/experiences/', experience_list_api, name='experience_list_api'),
+    path('api-demo/', api_demo, name='api_demo'),
+
+    path('itinerary/', include('itineraries.urls')),
     path('experiences/', include('experiences.urls')),
     path('bookings/', include('bookings.urls')),
+    path('reviews/', include('reviews.urls')),
 ]
 
 if settings.DEBUG:
