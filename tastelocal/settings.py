@@ -11,11 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-1)n1hj)h-89a9g38-hd62gayi1pe6%-&y&i9c6!8y92qt^rv6f')
 
 # --- ENVIRONMENT LOGIC ---
-if os.environ.get('WEBSITE_HOSTNAME'):
-    # Azure Cloud Settings
-    DEBUG = False
-    ALLOWED_HOSTS = [
-    "taste-local-k3pbndl8r-jeanlimsl3-9198s-projects.vercel.app",
+DEBUG = False
+
+ALLOWED_HOSTS = [
     ".vercel.app",
     "127.0.0.1",
     "localhost",
