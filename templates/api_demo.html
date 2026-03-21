@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">API Demo: Food Experiences</h2>
+
+    <div id="api-results" class="row g-4">
+        <!-- Data will load here -->
+    </div>
+</div>
+
+<script>
+fetch('/api/experiences/')
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('api-results');
+
+        data.forEach(exp => {
+            const card = `
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5>${exp.title}</h5>
+                            <p>${exp.location}</p>
+                            <p><strong>Category:</strong> ${exp.category_display}</p>
+                            <p><strong>Price:</strong> $${exp.price}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+    });
+</script>
+
+{% endblock %}

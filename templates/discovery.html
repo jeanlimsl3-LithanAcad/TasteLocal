@@ -3,339 +3,118 @@
 
 {% block content %}
 
-<style>
-    .food-discovery-hero {
-        background: linear-gradient(135deg, #1e4fa3, #3b6ed6);
-        color: white;
-        padding: 70px 0;
-    }
+<div class="container py-5">
 
-    .food-discovery-hero h1 {
-        font-size: 2.4rem;
-        font-weight: 700;
-        line-height: 1.2;
-    }
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Available Food Experiences</h1>
+        <p class="text-muted">
+            Browse tours, workshops, and curated local food experiences.
+        </p>
+    </div>
 
-    .food-discovery-hero p {
-        max-width: 520px;
-        color: rgba(255, 255, 255, 0.92);
-    }
+    <!-- Filter Form -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-body">
+            <form method="get" class="row g-3">
 
-    .hero-image-box {
-        height: 280px;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
-    .hero-image-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform 0.4s ease;
-    }
-
-    .hero-image-box:hover img {
-        transform: scale(1.05);
-    }
-
-    .search-btn,
-    .apply-btn {
-        background-color: #f57c00;
-        border: none;
-        color: white;
-        font-weight: 600;
-    }
-
-    .search-btn:hover,
-    .apply-btn:hover {
-        background-color: #df7300;
-        color: white;
-    }
-
-    .section-block {
-        padding: 70px 0;
-    }
-
-    .filter-tag {
-        display: inline-block;
-        background: #eef4ff;
-        color: #1e4fa3;
-        border: 1px solid #d7e5ff;
-        border-radius: 6px;
-        padding: 6px 12px;
-        margin: 0 8px 8px 0;
-        font-size: 0.9rem;
-    }
-
-    .filter-label {
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: #1e4fa3;
-    }
-
-    .vendors-title {
-        font-size: 2rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 40px;
-        color: #1e4fa3;
-    }
-
-    .vendor-card {
-        border: 1px solid #e6e6e6;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        height: 100%;
-        background: white;
-    }
-
-    .vendor-card img,
-    .vendor-image-placeholder {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-    }
-
-    .vendor-image-placeholder {
-        background: #d9d9d9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #666;
-        font-weight: 600;
-    }
-
-    .vendor-card .card-body {
-        padding: 16px;
-    }
-
-    .vendor-card .card-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-        color: #1e4fa3;
-    }
-
-    .rating-text {
-        color: #f57c00;
-        font-weight: 600;
-    }
-
-    .price-text {
-        color: #1e4fa3;
-        font-weight: 700;
-    }
-
-    .discovery-footer {
-        border-top: 1px solid #e5e5e5;
-        padding: 28px 0 10px;
-        margin-top: 40px;
-    }
-
-    .discovery-footer .footer-links {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 28px;
-    }
-
-    .discovery-footer a {
-        text-decoration: none;
-        color: #444;
-        font-size: 0.95rem;
-    }
-
-    .discovery-footer a:hover {
-        color: #f57c00;
-    }
-
-    .btn-check:checked + .filter-tag {
-    background: #1e4fa3;
-    color: white;
-    border-color: #1e4fa3;
-}
-</style>
-
-<!-- Food Discovery Hero -->
-<section class="food-discovery-hero">
-    <div class="container">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-6">
-                <h1>Food Discovery</h1>
-                <p class="mt-3 mb-4">
-                    Explore Singapore’s best food vendors and unique culinary experiences in your area.
-                </p>
-
-                <div class="row g-2">
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" placeholder="What are you craving?">
-                    </div>
-                    <div class="col-sm-4 d-grid">
-                        <button class="btn search-btn">Search</button>
-                    </div>
+                <div class="col-md-4">
+                    <label class="form-label">Search</label>
+                    <input
+                        type="text"
+                        name="keyword"
+                        class="form-control"
+                        placeholder="Search by title"
+                        value="{{ selected_keyword }}"
+                    >
                 </div>
-            </div>
 
-            <div class="col-lg-6">
-            <div class="hero-image-box">
-            <img src="{% static 'images/food_discovery_heroV2.jpg' %}" alt="Food discovery experiences in Singapore">
+                <div class="col-md-4">
+                    <label class="form-label">Category</label>
+                    <select name="category" class="form-select">
+                        <option value="">All Categories</option>
+                        {% for value, label in category_choices %}
+                            <option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Location</label>
+                    <input
+                        type="text"
+                        name="location"
+                        class="form-control"
+                        placeholder="e.g. Chinatown"
+                        value="{{ selected_location }}"
+                    >
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-orange">
+                        Apply Filters
+                    </button>
+
+                    <a href="{% url 'discover' %}" class="btn btn-outline-secondary">
+                        Reset
+                    </a>
+                </div>
+
+            </form>
         </div>
     </div>
-        </div>
-    </div>
-</section>
 
-<!-- Filter Section -->
-<section class="section-block bg-white">
-    <div class="container">
-        <div class="row align-items-start g-5">
-            <div class="col-lg-5">
-                <h2 class="fw-bold" style="color:#1e4fa3;">Filter Your Search</h2>
-                <p class="text-muted mt-3 mb-0">
-                    Narrow down your search for the perfect food experience.
-                </p>
-            </div>
+    <!-- Results -->
+    <div class="row g-4">
+        {% for experience in experiences %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
 
-            <div class="col-lg-7">
-                <form method="get" action="{% url 'discover' %}">
-                    <div class="mb-4">
-                        <div class="filter-label">Food Category</div>
-                        <div>
-                            <input type="radio" class="btn-check" name="category" id="cat-all" value="" {% if not selected_category %}checked{% endif %}>
-                            <label class="filter-tag" for="cat-all">All</label>
-
-                            <input type="radio" class="btn-check" name="category" id="cat-hawker" value="hawker" {% if selected_category == "hawker" %}checked{% endif %}>
-                            <label class="filter-tag" for="cat-hawker">Hawker</label>
-
-                            <input type="radio" class="btn-check" name="category" id="cat-restaurant" value="restaurant" {% if selected_category == "restaurant" %}checked{% endif %}>
-                            <label class="filter-tag" for="cat-restaurant">Restaurant</label>
-
-                            <input type="radio" class="btn-check" name="category" id="cat-cafe" value="cafe" {% if selected_category == "cafe" %}checked{% endif %}>
-                            <label class="filter-tag" for="cat-cafe">Cafe</label>
-
-                            <input type="radio" class="btn-check" name="category" id="cat-tour" value="tour" {% if selected_category == "tour" %}checked{% endif %}>
-                            <label class="filter-tag" for="cat-tour">Food Tour</label>
-
-                            <input type="radio" class="btn-check" name="category" id="cat-workshop" value="workshop" {% if selected_category == "workshop" %}checked{% endif %}>
-                            <label class="filter-tag" for="cat-workshop">Cooking Workshop</label>
-                        </div>
-                        <small class="text-muted">Select a category</small>
+                {% if experience.image %}
+                    <img
+                        src="{{ experience.image.url }}"
+                        alt="{{ experience.title }}"
+                        class="card-img-top"
+                        style="height: 220px; object-fit: cover;"
+                    >
+                {% else %}
+                    <div style="height:220px; background:#dddddd; display:flex; align-items:center; justify-content:center;">
+                        No Image
                     </div>
+                {% endif %}
 
-                    <div class="mb-4">
-                        <div class="filter-label">Location</div>
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="location"
-                            placeholder="Enter your location"
-                            value="{{ selected_location|default:'' }}"
-                        >
-                        <small class="text-muted">Where are you located?</small>
-                    </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold">{{ experience.title }}</h5>
 
-                    <div class="mb-4">
-                        <div class="filter-label">Price Range</div>
-                        <div>
-                            <input type="radio" class="btn-check" name="price_range" id="price-all" value="" {% if not selected_price_range %}checked{% endif %}>
-                            <label class="filter-tag" for="price-all">All</label>
+                    <p class="text-muted">
+                        {{ experience.description|truncatewords:16 }}
+                    </p>
 
-                            <input type="radio" class="btn-check" name="price_range" id="price-low" value="low" {% if selected_price_range == "low" %}checked{% endif %}>
-                            <label class="filter-tag" for="price-low">$</label>
+                    <p class="mb-1"><strong>Location:</strong> {{ experience.location }}</p>
+                    <p class="mb-1"><strong>Category:</strong> {{ experience.get_category_display }}</p>
+                    <p class="mb-3"><strong>Price:</strong> ${{ experience.price }}</p>
 
-                            <input type="radio" class="btn-check" name="price_range" id="price-mid" value="mid" {% if selected_price_range == "mid" %}checked{% endif %}>
-                            <label class="filter-tag" for="price-mid">$$</label>
-
-                            <input type="radio" class="btn-check" name="price_range" id="price-high" value="high" {% if selected_price_range == "high" %}checked{% endif %}>
-                            <label class="filter-tag" for="price-high">$$$</label>
-                        </div>
-                        <small class="text-muted">Select your budget</small>
-                    </div>
-
-                    <div class="mb-4">
-                        <div class="filter-label">Rating</div>
-                        <div>
-                            <span class="filter-tag">1 Star</span>
-                            <span class="filter-tag">2 Stars</span>
-                            <span class="filter-tag">3 Stars</span>
-                            <span class="filter-tag">4 Stars</span>
-                            <span class="filter-tag">5 Stars</span>
-                        </div>
-                        <small class="text-muted">Choose minimum rating</small>
-                    </div>
-
-                    <button type="submit" class="btn apply-btn px-4">Apply Filters</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Available Food Vendors -->
-<section class="section-block" style="background:#f6f7fb;">
-    <div class="container">
-        <h2 class="vendors-title">Available Food Vendors</h2>
-
-        <div class="row g-4">
-            {% for experience in experiences %}
-            <div class="col-md-6 col-lg-4">
-                <div class="vendor-card">
-                    {% if experience.image %}
-                        <img src="{{ experience.image.url }}" alt="{{ experience.title }}">
-                    {% else %}
-                        <div class="vendor-image-placeholder">No Image Available</div>
-                    {% endif %}
-
-                    <div class="card-body">
-                        <h5 class="card-title">{{ experience.title }}</h5>
-
-                        <p class="mb-2 text-muted">
-                            {{ experience.description|truncatewords:18 }}
-                        </p>
-
-                        <p class="mb-1">
-                            <strong>Location:</strong> {{ experience.location }}
-                        </p>
-
-                        <p class="rating-text mb-1">
-                            Category: {{ experience.get_category_display }}
-                        </p>
-
-                        <p class="price-text mb-3">
-                            ${{ experience.price }}
-                        </p>
-
-                        <a href="{% url 'experience_detail' experience.id %}"
-                        class="btn btn-sm btn-outline-primary">
-                        View Details
+                    <div class="mt-auto d-flex gap-2 flex-wrap">
+                        <a href="{% url 'experience_detail' experience.id %}" class="btn btn-sm btn-outline-primary">
+                            View Details
                         </a>
-                        
-                        <a href="{% url 'itinerary' %}" class="btn btn-sm btn-outline-secondary">Add to Itinerary</a>
+
+                        <a href="{% url 'add_to_itinerary' experience.id %}" class="btn btn-sm btn-outline-secondary">
+                            Add to Itinerary
+                        </a>
                     </div>
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <div class="alert alert-light text-center border">
-                    No food experiences available yet.
-                </div>
-            </div>
-            {% endfor %}
-        </div>
 
-        <div class="discovery-footer">
-            <div class="footer-links">
-                <a href="#">Contact Us</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Follow us on Social Media</a>
             </div>
         </div>
-
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No food experiences matched your filters.</p>
+        </div>
+        {% endfor %}
     </div>
-</section>
+
+</div>
 
 {% endblock %}

@@ -5,55 +5,97 @@
 
 <div class="container mt-4">
 
-<!-- Breadcrumb -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{% url 'home' %}">Home</a>
-        </li>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'discover' %}">Discover</a>
+            </li>
+            <li class="breadcrumb-item active">
+                {{ experience.title }}
+            </li>
+        </ol>
+    </nav>
 
-        <li class="breadcrumb-item">
-            <a href="{% url 'discover' %}">Discover</a>
-        </li>
+    <h1 class="mb-4">{{ experience.title }}</h1>
 
-        <li class="breadcrumb-item active">
-            {{ experience.title }}
-        </li>
-    </ol>
-</nav>
+    <div class="row g-4">
 
-<h1 class="mb-4">{{ experience.title }}</h1>
+        <div class="col-lg-8">
 
-<div class="row g-4">
+            {% if experience.image %}
+                <img src="{{ experience.image.url }}"
+                     class="img-fluid rounded mb-4"
+                     style="width:100%; max-height:400px; object-fit:cover;">
+            {% endif %}
 
-    <!-- LEFT COLUMN -->
-    <div class="col-lg-8">
+            <h4>Description</h4>
+            <p>{{ experience.description }}</p>
 
-        {% if experience.image %}
-        <img src="{{ experience.image.url }}" class="img-fluid rounded mb-4">
-        {% endif %}
+            <div class="mb-3">
+                <p class="mb-1">
+                    <strong>Location:</strong> {{ experience.location }}
+                </p>
 
-        <h4>Description</h4>
-        <p>{{ experience.description }}</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="https://www.google.com/maps?q={{ experience.location|urlencode }}"
+                       target="_blank"
+                       class="btn btn-outline-primary btn-sm">
+                       📍 View on Google Maps
+                    </a>
 
-        <p><strong>Location:</strong> {{ experience.location }}</p>
-        <p><strong>Category:</strong> {{ experience.get_category_display }}</p>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination={{ experience.location|urlencode }}"
+                       target="_blank"
+                       class="btn btn-orange btn-sm">
+                       Get Directions
+                    </a>
+                </div>
+            </div>
 
-    </div>
+            <p><strong>Category:</strong> {{ experience.get_category_display }}</p>
 
-    <!-- RIGHT COLUMN -->
-<div class="col-lg-4">
+            <hr class="my-4">
 
-    <div class="booking-box">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Reviews</h4>
 
-        <h3 class="price-text">
-            ${{ experience.price }}
-        </h3>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'add_review' experience.id %}" class="btn btn-outline-primary btn-sm">
+                        Add Review
+                    </a>
+                {% endif %}
+            </div>
 
-        <a href="{% url 'create_booking' experience.id %}" 
-           class="btn book-btn btn-lg w-100 mt-3">
-           Book Experience
-        </a>
+            {% if reviews %}
+                {% for review in reviews %}
+                    <div class="card shadow-sm border-0 mb-3">
+                        <div class="card-body">
+                            <h6 class="mb-1">{{ review.user.username }}</h6>
+                            <p class="mb-1"><strong>Rating:</strong> {{ review.rating }}/5</p>
+                            <p class="mb-0">{{ review.comment }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted">No reviews yet.</p>
+            {% endif %}
+
+        </div>
+
+        <div class="col-lg-4">
+            <div class="booking-box p-4 shadow-sm rounded bg-white">
+                <h3 class="price-text mb-3">
+                    ${{ experience.price }}
+                </h3>
+
+                <a href="{% url 'create_booking' experience.id %}"
+                   class="btn btn-orange btn-lg w-100">
+                   Book Experience
+                </a>
+            </div>
+        </div>
 
     </div>
 

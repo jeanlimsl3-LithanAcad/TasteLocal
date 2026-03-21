@@ -3,23 +3,78 @@
 {% block content %}
 
 <div class="container py-5">
-
-    <h2 class="fw-bold text-center mb-4">
-        Explore Food Experiences Near You
-    </h2>
-
-    <p class="text-center text-muted mb-5">
-        Use the map below to discover nearby food experiences hosted by local vendors.
-    </p>
-
-    <div class="card shadow-sm">
-
-        <div id="map" style="height:450px; background:#dddddd; display:flex; align-items:center; justify-content:center;">
-            Map will appear here
-        </div>
-
+    <div class="mb-4 text-center">
+        <h1 class="fw-bold">Location-Based Discovery</h1>
+        <p class="text-muted">
+            Explore available food experiences across Singapore by location.
+        </p>
     </div>
 
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div id="map" style="height: 520px; border-radius: 12px;"></div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h4 class="fw-bold mb-3">Available Locations</h4>
+
+                    {% if map_experiences %}
+                        <div class="list-group list-group-flush">
+                            {% for exp in map_experiences %}
+                                <div class="list-group-item px-0">
+                                    <h6 class="mb-1">{{ exp.title }}</h6>
+                                    <p class="mb-1 text-muted">{{ exp.location }}</p>
+                                    <p class="mb-1"><strong>Category:</strong> {{ exp.category }}</p>
+                                    <p class="mb-0"><strong>Price:</strong> ${{ exp.price }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No mapped experiences available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+{{ map_experiences|json_script:"map-data" }}
+
+<script>
+    const mapData = JSON.parse(document.getElementById("map-data").textContent);
+
+    const map = L.map('map').setView([1.3521, 103.8198], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    if (mapData.length > 0) {
+        const bounds = [];
+
+        mapData.forEach(exp => {
+            const marker = L.marker([exp.lat, exp.lng]).addTo(map);
+
+            marker.bindPopup(`
+                <strong>${exp.title}</strong><br>
+                ${exp.location}<br>
+                Category: ${exp.category}<br>
+                Price: $${exp.price}
+            `);
+
+            bounds.push([exp.lat, exp.lng]);
+        });
+
+        map.fitBounds(bounds, { padding: [30, 30] });
+    }
+</script>
 
 {% endblock %}

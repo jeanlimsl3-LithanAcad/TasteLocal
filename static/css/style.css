@@ -299,21 +299,24 @@
     font-weight: 700;
 }
 
+.nav-link-custom {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
 .nav-link-custom:hover {
     color: #f57c00;
 }
 
-.nav-link-custom {
-    text-decoration: none;
-    color: #222;
-    margin-left: 24px;
-    font-weight: 500;
-}
-
-.nav-logout-btn {
+.logout-btn {
     background: none;
     border: none;
     padding: 0;
+    color: #333;
     cursor: pointer;
-    font: inherit;
+}
+
+.logout-btn:hover {
+    color: #f57c00;
 }

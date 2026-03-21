@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import Http404
-from django.shortcuts import render, redirect
+from django.http import Http404, HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
 
 from experiences.models import Experience
+from bookings.models import Booking
 
 
 def home(request):
@@ -69,119 +71,121 @@ def register_view(request):
         "error_message": error_message,
     })
 
-
 def discovery(request):
     experiences = Experience.objects.filter(is_active=True)
-    return render(request, "discovery.html", {"experiences": experiences})
+
+    keyword = request.GET.get('keyword', '').strip()
+    category = request.GET.get('category', '').strip()
+    location = request.GET.get('location', '').strip()
+
+    if keyword:
+        experiences = experiences.filter(title__icontains=keyword)
+
+    if category:
+        experiences = experiences.filter(category=category)
+
+    if location:
+        experiences = experiences.filter(location__icontains=location)
+
+    context = {
+        "experiences": experiences,
+        "selected_keyword": keyword,
+        "selected_category": category,
+        "selected_location": location,
+        "category_choices": Experience.CATEGORY_CHOICES,
+    }
+
+    return render(request, "discovery.html", context)
 
 
 def vendors(request):
-    return render(request, "vendors.html")
+    experiences = Experience.objects.filter(is_active=True).order_by('-created_at')
+    return render(request, "vendors.html", {
+        "experiences": experiences,
+    })
 
 
 def booking(request):
-    return render(request, "booking.html")
+    # Old static booking page is no longer used.
+    # Keep this safe redirect so users always use the correct booking flow.
+    return redirect('discover')
 
 
+@login_required(login_url='/login/')
 def vendor_dashboard(request):
-    return render(request, "vendor_dashboard.html")
+    if not request.user.is_staff:
+        return HttpResponseForbidden("You are not authorized to access the vendor dashboard.")
+
+    vendor_experiences = Experience.objects.filter(
+        vendor=request.user
+    ).order_by('-created_at')
+
+    vendor_bookings = Booking.objects.filter(
+        experience__vendor=request.user
+    ).select_related('experience', 'user').order_by('-created_at')
+
+    return render(request, "vendor_dashboard.html", {
+        "vendor_experiences": vendor_experiences,
+        "vendor_bookings": vendor_bookings,
+    })
 
 
 def map_view(request):
-    return render(request, "map.html")
+    experiences = Experience.objects.filter(is_active=True)
+
+    coordinate_map = {
+        "Katong, Singapore": {"lat": 1.3054, "lng": 103.9050},
+        "Maxwell Food Centre, Singapore": {"lat": 1.2803, "lng": 103.8446},
+        "Lau Pa Sat, Singapore": {"lat": 1.2806, "lng": 103.8503},
+        "East Coast, Singapore": {"lat": 1.3009, "lng": 103.9122},
+        "Crawford Lane, Singapore": {"lat": 1.3073, "lng": 103.8616},
+        "Newton, Singapore": {"lat": 1.3119, "lng": 103.8395},
+        "Bugis, Singapore": {"lat": 1.3009, "lng": 103.8558},
+        "Far East Square, Singapore": {"lat": 1.2820, "lng": 103.8487},
+        "Chinatown": {"lat": 1.2838, "lng": 103.8448},
+        "Katong": {"lat": 1.3054, "lng": 103.9050},
+        "Maxwell Food Centre": {"lat": 1.2803, "lng": 103.8446},
+        "Lau Pa Sat": {"lat": 1.2806, "lng": 103.8503},
+        "East Coast": {"lat": 1.3009, "lng": 103.9122},
+        "Crawford Lane": {"lat": 1.3073, "lng": 103.8616},
+        "Newton": {"lat": 1.3119, "lng": 103.8395},
+        "Bugis": {"lat": 1.3009, "lng": 103.8558},
+        "Far East Square": {"lat": 1.2820, "lng": 103.8487},
+    }
+
+    map_experiences = []
+
+    for exp in experiences:
+        coords = coordinate_map.get(exp.location)
+        if coords:
+            map_experiences.append({
+                "title": exp.title,
+                "location": exp.location,
+                "price": str(exp.price),
+                "category": exp.get_category_display(),
+                "lat": coords["lat"],
+                "lng": coords["lng"],
+            })
+
+    return render(request, "map.html", {
+        "map_experiences": map_experiences,
+    })
 
 
 def itinerary(request):
+    # If your main urls.py already includes itineraries.urls,
+    # this legacy view will no longer be used.
     return render(request, "itinerary.html")
 
 
 def vendor_page(request, id):
-    vendors_data = {
-        1: {
-            "title": "328 Katong Laksa",
-            "host": "328 Katong Laksa",
-            "rating": "4.9 ★",
-            "location": "Katong, Singapore",
-            "price": "SGD 8 – 12",
-            "image": "laksa.jpg",
-            "map": "https://www.google.com/maps?q=328+Katong+Laksa+Singapore&output=embed",
-            "map_link": "https://www.google.com/maps?q=328+Katong+Laksa+Singapore",
-        },
-        2: {
-            "title": "Tian Tian Hainanese Chicken Rice",
-            "host": "Tian Tian Chicken Rice",
-            "rating": "4.8 ★",
-            "location": "Maxwell Food Centre, Singapore",
-            "price": "SGD 6 – 10",
-            "image": "chicken_rice.jpg",
-            "map": "https://www.google.com/maps?q=Tian+Tian+Chicken+Rice+Maxwell+Singapore&output=embed",
-            "map_link": "https://www.google.com/maps?q=Tian+Tian+Chicken+Rice+Maxwell+Singapore",
-        },
-        3: {
-            "title": "Lau Pa Sat Satay Street",
-            "host": "Lau Pa Sat",
-            "rating": "4.7 ★",
-            "location": "Lau Pa Sat, Singapore",
-            "price": "SGD 10 – 20",
-            "image": "satay.jpg",
-            "map": "https://www.google.com/maps?q=Lau+Pa+Sat+Singapore&output=embed",
-            "map_link": "https://www.google.com/maps?q=Lau+Pa+Sat+Singapore",
-        },
-        4: {
-            "title": "Jumbo Seafood Chilli Crab",
-            "host": "Jumbo Seafood",
-            "rating": "4.8 ★",
-            "location": "East Coast, Singapore",
-            "price": "SGD 40 – 80",
-            "image": "chilli_crab.jpg",
-            "map": "https://www.google.com/maps?q=Jumbo+Seafood+East+Coast+Singapore&output=embed",
-            "map_link": "https://www.google.com/maps?q=Jumbo+Seafood+East+Coast+Singapore",
-        },
-        5: {
-            "title": "Hill Street Tai Hwa Pork Noodle",
-            "host": "Tai Hwa Pork Noodle",
-            "rating": "4.8 ★",
-            "location": "Crawford Lane, Singapore",
-            "price": "SGD 6 – 12",
-            "image": "noodles.jpg",
-            "map": "https://www.google.com/maps?q=Hill+Street+Tai+Hwa+Pork+Noodle+Singapore&output=embed",
-            "map_link": "https://www.google.com/maps?q=Hill+Street+Tai+Hwa+Pork+Noodle+Singapore",
-        },
-        6: {
-            "title": "Newton Food Centre Hawker Experience",
-            "host": "Newton Food Centre",
-            "rating": "4.6 ★",
-            "location": "Newton, Singapore",
-            "price": "SGD 15 – 30",
-            "image": "hawker.jpg",
-            "map": "https://www.google.com/maps?q=Newton+Food+Centre+Singapore&output=embed",
-            "map_link": "https://www.google.com/maps?q=Newton+Food+Centre+Singapore",
-        },
-        7: {
-            "title": "Ah Chew Traditional Desserts",
-            "host": "Ah Chew Desserts",
-            "rating": "4.6 ★",
-            "location": "Bugis, Singapore",
-            "price": "SGD 5 – 10",
-            "image": "dessert.jpg",
-            "map": "https://www.google.com/maps?q=Ah+Chew+Desserts+Singapore&output=embed",
-            "map_link": "https://www.google.com/maps?q=Ah+Chew+Desserts+Singapore",
-        },
-        8: {
-            "title": "Ya Kun Kaya Toast Breakfast Experience",
-            "host": "Ya Kun Kaya Toast",
-            "rating": "4.5 ★",
-            "location": "Far East Square, Singapore",
-            "price": "SGD 4 – 8",
-            "image": "kaya_toast.jpg",
-            "map": "https://www.google.com/maps?q=Ya+Kun+Kaya+Toast+Singapore&output=embed",
-            "map_link": "https://www.google.com/maps?q=Ya+Kun+Kaya+Toast+Singapore",
-        },
-    }
+    experience = get_object_or_404(Experience, id=id, is_active=True)
+    reviews = experience.reviews.select_related('user').all()
 
-    vendor = vendors_data.get(id)
-
-    if vendor is None:
-        raise Http404("Vendor not found.")
-
-    return render(request, "vendor.html", {"vendor": vendor})
+    return render(request, "vendor.html", {
+        "experience": experience,
+        "reviews": reviews,
+    })
+    
+def api_demo(request):
+    return render(request, "api_demo.html")    
