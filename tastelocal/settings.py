@@ -14,7 +14,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-1)n1hj)h-89a9g38-hd62
 if os.environ.get('WEBSITE_HOSTNAME'):
     # Azure Cloud Settings
     DEBUG = False
-    ALLOWED_HOSTS = [os.environ.get('WEBSITE_HOSTNAME')]
+    ALLOWED_HOSTS = [
+    "taste-local-k3pbndl8r-jeanlimsl3-9198s-projects.vercel.app",
+    ".vercel.app",
+    "127.0.0.1",
+    "localhost",
+]
     
     DATABASES = {
         'default': {
