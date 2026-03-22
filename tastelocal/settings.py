@@ -14,7 +14,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # --- BASIC SETTINGS ---
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     ".vercel.app",
@@ -97,6 +97,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # --- MEDIA FILES ---
 MEDIA_URL = '/media/'
@@ -107,5 +108,3 @@ LOGIN_URL = '/login/'
 
 # --- DEFAULT PRIMARY KEY FIELD TYPE ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
