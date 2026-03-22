@@ -131,43 +131,26 @@ def vendor_dashboard(request):
 
 
 def map_view(request):
-    experiences = Experience.objects.filter(is_active=True)
+    selected_location = request.GET.get("location", "")
 
-    coordinate_map = {
-        "Katong, Singapore": {"lat": 1.3054, "lng": 103.9050},
-        "Maxwell Food Centre, Singapore": {"lat": 1.2803, "lng": 103.8446},
-        "Lau Pa Sat, Singapore": {"lat": 1.2806, "lng": 103.8503},
-        "East Coast, Singapore": {"lat": 1.3009, "lng": 103.9122},
-        "Crawford Lane, Singapore": {"lat": 1.3073, "lng": 103.8616},
-        "Newton, Singapore": {"lat": 1.3119, "lng": 103.8395},
-        "Bugis, Singapore": {"lat": 1.3009, "lng": 103.8558},
-        "Far East Square, Singapore": {"lat": 1.2820, "lng": 103.8487},
-        "Chinatown": {"lat": 1.2838, "lng": 103.8448},
-        "Katong": {"lat": 1.3054, "lng": 103.9050},
-        "Maxwell Food Centre": {"lat": 1.2803, "lng": 103.8446},
-        "Lau Pa Sat": {"lat": 1.2806, "lng": 103.8503},
-        "East Coast": {"lat": 1.3009, "lng": 103.9122},
-        "Crawford Lane": {"lat": 1.3073, "lng": 103.8616},
-        "Newton": {"lat": 1.3119, "lng": 103.8395},
-        "Bugis": {"lat": 1.3009, "lng": 103.8558},
-        "Far East Square": {"lat": 1.2820, "lng": 103.8487},
+    map_queries = {
+        "Chinatown": "Chinatown, Singapore",
+        "Bugis": "Bugis, Singapore",
+        "Katong": "Katong, Singapore",
+        "Little India": "Little India, Singapore",
+        "Maxwell": "Maxwell Food Centre, Singapore",
     }
 
-    map_experiences = []
+    map_query = map_queries.get(selected_location, "Singapore")
 
-    for exp in experiences:
-        coords = coordinate_map.get(exp.location)
-        if coords:
-            map_experiences.append({
-                "title": exp.title,
-                "location": exp.location,
-                "price": str(exp.price),
-                "category": exp.get_category_display(),
-                "lat": coords["lat"],
-                "lng": coords["lng"],
-            })
+    map_experiences = Experience.objects.filter(is_active=True)
+
+    if selected_location:
+        map_experiences = map_experiences.filter(location__icontains=selected_location)
 
     return render(request, "map.html", {
+        "selected_location": selected_location,
+        "map_query": map_query,
         "map_experiences": map_experiences,
     })
 

@@ -6,10 +6,30 @@
 <div class="container py-5">
 
     <div class="text-center mb-5">
-        <h1 class="fw-bold">Available Food Experiences</h1>
+        <h1 class="fw-bold">Discover Food Experiences Near You</h1>
         <p class="text-muted">
-            Browse tours, workshops, and curated local food experiences.
+            Explore local food tours, workshops, and hidden gems across Singapore by area.
         </p>
+    </div>
+
+    <div class="text-center mb-4">
+        <p class="fw-semibold mb-2">Popular Locations</p>
+
+        <a href="{% url 'discover' %}?location=Chinatown" class="btn btn-sm btn-outline-secondary me-2 mb-2">
+            Chinatown
+        </a>
+        <a href="{% url 'discover' %}?location=Bugis" class="btn btn-sm btn-outline-secondary me-2 mb-2">
+            Bugis
+        </a>
+        <a href="{% url 'discover' %}?location=Katong" class="btn btn-sm btn-outline-secondary me-2 mb-2">
+            Katong
+        </a>
+        <a href="{% url 'discover' %}?location=Little India" class="btn btn-sm btn-outline-secondary me-2 mb-2">
+            Little India
+        </a>
+        <a href="{% url 'discover' %}?location=Maxwell" class="btn btn-sm btn-outline-secondary me-2 mb-2">
+            Maxwell
+        </a>
     </div>
 
     <!-- Filter Form -->
@@ -71,55 +91,17 @@
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0">
 
-                {% if experience.get_category_display == "Seafood" %}
+                {% if experience.image %}
                     <img
-                        src="{% static 'images/chilli_crab.jpg' %}"
-                        alt="{{ experience.title }}"
-                        class="card-img-top"
-                        style="height: 220px; object-fit: cover;"
-                    >
-                {% elif experience.get_category_display == "Desserts" %}
-                    <img
-                        src="{% static 'images/dessert.jpg' %}"
-                        alt="{{ experience.title }}"
-                        class="card-img-top"
-                        style="height: 220px; object-fit: cover;"
-                    >
-                {% elif experience.get_category_display == "Cooking Class" %}
-                    <img
-                        src="{% static 'images/cooking_class.jpg' %}"
-                        alt="{{ experience.title }}"
-                        class="card-img-top"
-                        style="height: 220px; object-fit: cover;"
-                    >
-                {% elif experience.get_category_display == "Night Market" %}
-                    <img
-                        src="{% static 'images/328_katong_laksa.jpg' %}"
-                        alt="{{ experience.title }}"
-                        class="card-img-top"
-                        style="height: 220px; object-fit: cover;"
-                    >
-                {% elif experience.get_category_display == "Street Food" %}
-                    <img
-                        src="{% static 'images/fried_kuay_teow.jpg' %}"
-                        alt="{{ experience.title }}"
-                        class="card-img-top"
-                        style="height: 220px; object-fit: cover;"
-                    >
-                {% elif experience.get_category_display == "Hawker" %}
-                    <img
-                        src="{% static 'images/hawker_centre.jpeg' %}"
+                        src="{{ experience.image.url }}"
                         alt="{{ experience.title }}"
                         class="card-img-top"
                         style="height: 220px; object-fit: cover;"
                     >
                 {% else %}
-                    <img
-                        src="{% static 'images/chicken_rice.jpg' %}"
-                        alt="{{ experience.title }}"
-                        class="card-img-top"
-                        style="height: 220px; object-fit: cover;"
-                    >
+                    <div style="height:220px; background:#dddddd; display:flex; align-items:center; justify-content:center;">
+                        No Image
+                    </div>
                 {% endif %}
 
                 <div class="card-body d-flex flex-column">
@@ -129,9 +111,9 @@
                         {{ experience.description|truncatewords:16 }}
                     </p>
 
-                    <p class="mb-1"><strong>Location:</strong> {{ experience.location }}</p>
+                    <p class="mb-2 text-muted">📍 {{ experience.location }}</p>
                     <p class="mb-1"><strong>Category:</strong> {{ experience.get_category_display }}</p>
-                    <p class="mb-3"><strong>Price:</strong> ${{ experience.price }}</p>
+                    <p class="mb-3 text-success fw-semibold">From ${{ experience.price }}</p>
 
                     <div class="mt-auto d-flex gap-2 flex-wrap">
                         <a href="{% url 'experience_detail' experience.id %}" class="btn btn-sm btn-outline-primary">

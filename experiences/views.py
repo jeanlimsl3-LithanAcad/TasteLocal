@@ -1,9 +1,14 @@
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import Experience
 from .serializers import ExperienceSerializer
+
+
+def is_vendor(user):
+    return user.is_authenticated and user.is_staff
 
 
 def experience_detail(request, id):

@@ -1,80 +1,114 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
 <div class="container py-5">
-    <div class="mb-4 text-center">
-        <h1 class="fw-bold">Location-Based Discovery</h1>
+
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">Explore Food Experiences on the Map</h1>
         <p class="text-muted">
-            Explore available food experiences across Singapore by location.
+            Browse popular food areas across Singapore and discover where each experience is located.
         </p>
     </div>
 
-    <div class="row g-4">
-        <div class="col-lg-8">
-            <div id="map" style="height: 520px; border-radius: 12px;"></div>
-        </div>
+    <div class="text-center mb-4">
+        <p class="fw-semibold mb-2">Popular Locations</p>
 
-        <div class="col-lg-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h4 class="fw-bold mb-3">Available Locations</h4>
+        <a href="{% url 'map' %}?location=Chinatown" class="btn btn-sm btn-outline-secondary me-2 mb-2">Chinatown</a>
+        <a href="{% url 'map' %}?location=Bugis" class="btn btn-sm btn-outline-secondary me-2 mb-2">Bugis</a>
+        <a href="{% url 'map' %}?location=Katong" class="btn btn-sm btn-outline-secondary me-2 mb-2">Katong</a>
+        <a href="{% url 'map' %}?location=Little India" class="btn btn-sm btn-outline-secondary me-2 mb-2">Little India</a>
+        <a href="{% url 'map' %}?location=Maxwell" class="btn btn-sm btn-outline-secondary me-2 mb-2">Maxwell</a>
+        <a href="{% url 'map' %}" class="btn btn-sm btn-outline-dark me-2 mb-2">View All</a>
+    </div>
 
-                    {% if map_experiences %}
-                        <div class="list-group list-group-flush">
-                            {% for exp in map_experiences %}
-                                <div class="list-group-item px-0">
-                                    <h6 class="mb-1">{{ exp.title }}</h6>
-                                    <p class="mb-1 text-muted">{{ exp.location }}</p>
-                                    <p class="mb-1"><strong>Category:</strong> {{ exp.category }}</p>
-                                    <p class="mb-0"><strong>Price:</strong> ${{ exp.price }}</p>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-muted mb-0">No mapped experiences available.</p>
-                    {% endif %}
-                </div>
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-body">
+
+            {% if selected_location %}
+                <h5 class="fw-bold mb-3">Showing map for: {{ selected_location }}</h5>
+            {% else %}
+                <h5 class="fw-bold mb-3">Showing map for: Singapore</h5>
+            {% endif %}
+
+            <div class="ratio ratio-16x9">
+                <iframe
+                    src="https://www.google.com/maps?q={{ map_query|urlencode }}&output=embed"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy">
+                </iframe>
             </div>
+
         </div>
     </div>
+
+    <div class="mb-4">
+        {% if selected_location %}
+            <h3 class="fw-bold">Experiences in {{ selected_location }}</h3>
+            <p class="text-muted">Explore food experiences available in this area.</p>
+        {% else %}
+            <h3 class="fw-bold">All Food Experiences</h3>
+            <p class="text-muted">Browse all available experiences across Singapore.</p>
+        {% endif %}
+    </div>
+
+    <div class="row g-4">
+        {% for experience in map_experiences %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+
+                {% if experience.image %}
+                    <img
+                        src="{{ experience.image.url }}"
+                        alt="{{ experience.title }}"
+                        class="card-img-top"
+                        style="height: 220px; object-fit: cover;"
+                    >
+                {% else %}
+                    <div style="height:220px; background:#dddddd; display:flex; align-items:center; justify-content:center;">
+                        No Image
+                    </div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold">{{ experience.title }}</h5>
+
+                    <p class="text-muted">
+                        {{ experience.description|truncatewords:16 }}
+                    </p>
+
+                    <p class="mb-2 text-muted">📍 {{ experience.location }}</p>
+                    <p class="mb-1"><strong>Category:</strong> {{ experience.get_category_display }}</p>
+                    <p class="mb-3 text-success fw-semibold">From ${{ experience.price }}</p>
+
+                    <div class="mt-auto d-flex gap-2 flex-wrap">
+                        <a href="{% url 'experience_detail' experience.id %}" class="btn btn-sm btn-outline-primary">
+                            View Details
+                        </a>
+
+                        <a href="{% url 'add_to_itinerary' experience.id %}" class="btn btn-sm btn-outline-secondary">
+                            Add to Itinerary
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No food experiences found for this location.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{% url 'discover' %}" class="btn btn-orange">
+            Back to Discover
+        </a>
+    </div>
+
 </div>
-
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-{{ map_experiences|json_script:"map-data" }}
-
-<script>
-    const mapData = JSON.parse(document.getElementById("map-data").textContent);
-
-    const map = L.map('map').setView([1.3521, 103.8198], 11);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    if (mapData.length > 0) {
-        const bounds = [];
-
-        mapData.forEach(exp => {
-            const marker = L.marker([exp.lat, exp.lng]).addTo(map);
-
-            marker.bindPopup(`
-                <strong>${exp.title}</strong><br>
-                ${exp.location}<br>
-                Category: ${exp.category}<br>
-                Price: $${exp.price}
-            `);
-
-            bounds.push([exp.lat, exp.lng]);
-        });
-
-        map.fitBounds(bounds, { padding: [30, 30] });
-    }
-</script>
 
 {% endblock %}
