@@ -71,17 +71,55 @@
         <div class="col-md-6 col-lg-4">
             <div class="card h-100 shadow-sm border-0">
 
-                {% if experience.image %}
+                {% if experience.get_category_display == "Seafood" %}
                     <img
-                        src="{{ experience.image.url }}"
+                        src="{% static 'images/chilli_crab.jpg' %}"
+                        alt="{{ experience.title }}"
+                        class="card-img-top"
+                        style="height: 220px; object-fit: cover;"
+                    >
+                {% elif experience.get_category_display == "Desserts" %}
+                    <img
+                        src="{% static 'images/dessert.jpg' %}"
+                        alt="{{ experience.title }}"
+                        class="card-img-top"
+                        style="height: 220px; object-fit: cover;"
+                    >
+                {% elif experience.get_category_display == "Cooking Class" %}
+                    <img
+                        src="{% static 'images/cooking_class.jpg' %}"
+                        alt="{{ experience.title }}"
+                        class="card-img-top"
+                        style="height: 220px; object-fit: cover;"
+                    >
+                {% elif experience.get_category_display == "Night Market" %}
+                    <img
+                        src="{% static 'images/328_katong_laksa.jpg' %}"
+                        alt="{{ experience.title }}"
+                        class="card-img-top"
+                        style="height: 220px; object-fit: cover;"
+                    >
+                {% elif experience.get_category_display == "Street Food" %}
+                    <img
+                        src="{% static 'images/fried_kuay_teow.jpg' %}"
+                        alt="{{ experience.title }}"
+                        class="card-img-top"
+                        style="height: 220px; object-fit: cover;"
+                    >
+                {% elif experience.get_category_display == "Hawker" %}
+                    <img
+                        src="{% static 'images/hawker_centre.jpeg' %}"
                         alt="{{ experience.title }}"
                         class="card-img-top"
                         style="height: 220px; object-fit: cover;"
                     >
                 {% else %}
-                    <div style="height:220px; background:#dddddd; display:flex; align-items:center; justify-content:center;">
-                        No Image
-                    </div>
+                    <img
+                        src="{% static 'images/chicken_rice.jpg' %}"
+                        alt="{{ experience.title }}"
+                        class="card-img-top"
+                        style="height: 220px; object-fit: cover;"
+                    >
                 {% endif %}
 
                 <div class="card-body d-flex flex-column">
