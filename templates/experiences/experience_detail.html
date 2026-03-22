@@ -25,8 +25,32 @@
 
         <div class="col-lg-8">
 
-            {% if experience.image %}
-                <img src="{{ experience.image.url }}"
+            {% if experience.get_category_display == "Seafood" %}
+                <img src="{% static 'images/chilli_crab.jpg' %}"
+                     class="img-fluid rounded mb-4"
+                     style="width:100%; max-height:400px; object-fit:cover;">
+            {% elif experience.get_category_display == "Desserts" %}
+                <img src="{% static 'images/dessert.jpg' %}"
+                     class="img-fluid rounded mb-4"
+                     style="width:100%; max-height:400px; object-fit:cover;">
+            {% elif experience.get_category_display == "Cooking Class" %}
+                <img src="{% static 'images/cooking_class.jpg' %}"
+                     class="img-fluid rounded mb-4"
+                     style="width:100%; max-height:400px; object-fit:cover;">
+            {% elif experience.get_category_display == "Night Market" %}
+                <img src="{% static 'images/328_katong_laksa.jpg' %}"
+                     class="img-fluid rounded mb-4"
+                     style="width:100%; max-height:400px; object-fit:cover;">
+            {% elif experience.get_category_display == "Street Food" %}
+                <img src="{% static 'images/fried_kuay_teow.jpg' %}"
+                     class="img-fluid rounded mb-4"
+                     style="width:100%; max-height:400px; object-fit:cover;">
+            {% elif experience.get_category_display == "Hawker" %}
+                <img src="{% static 'images/hawker_centre.jpeg' %}"
+                     class="img-fluid rounded mb-4"
+                     style="width:100%; max-height:400px; object-fit:cover;">
+            {% else %}
+                <img src="{% static 'images/chicken_rice.jpg' %}"
                      class="img-fluid rounded mb-4"
                      style="width:100%; max-height:400px; object-fit:cover;">
             {% endif %}
