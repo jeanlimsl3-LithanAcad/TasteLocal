@@ -61,3 +61,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
+
+---
+
+[LinkedIn](https://www.linkedin.com/in/jeanlimsl/)
